@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Alert,
   StyleSheet,
   Text,
@@ -11,20 +12,12 @@ import React, { useState } from 'react';
 import colors from '../constants/globalstyles';
 
 const AddStudent = () => {
-  const [stdName, setName] = useState();
-  const [stdClass, setClass] = useState();
-  const [stdBoard, setBoard] = useState();
-  const [stdPhone, setPhone] = useState();
-  const [stdEmail, setEmail] = useState();
-  const [userData, setUserData] = useState({
-    stdName: '',
-    stdClass: '',
-    stdBoard: '',
-    stdPhone: '',
-    stdEmail: '',
-  });
-
-    // setFormData(prevState => ({...prevState,[key]: value}));
+  const [stdName, setName] = useState('');
+  const [stdClass, setClass] = useState('');
+  const [stdBoard, setBoard] = useState('');
+  const [stdPhone, setPhone] = useState('');
+  const [stdEmail, setEmail] = useState('');
+  const [loader, setLoader] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -75,15 +68,33 @@ const AddStudent = () => {
         value={stdEmail}
       />
 
-      <TouchableOpacity style={styles.btn} onPress={()=>{
-        const data = {
-          stdName, stdClass, stdBoard, stdPhone, stdEmail
-        };
-        console.log(data);
-        // Alert.alert('Student Added', 'Student successfully added!');
-        ToastAndroid.show("Student Successfully Added!", ToastAndroid.SHORT);
+      <TouchableOpacity style={styles.btn} disabled={loader} onPress={()=>{
+        if(stdName != '')
+        {
+          setLoader(true);
+          setTimeout(()=>{
+            setLoader(false);
+            const data = {
+              stdName, stdClass, stdBoard, stdPhone, stdEmail
+            };
+            console.log(data);
+            setName('');
+            setClass('');
+            setBoard('');
+            setPhone('');
+            setEmail('');
+            ToastAndroid.show("Student Successfully Added!", ToastAndroid.SHORT);
+          },2000)
+        }
+
+        else{
+          Alert.alert('Error', 'Name should not be empty!');
+        }
+
       }}>
+        {loader ? <ActivityIndicator/> :
         <Text style={styles.btntxt}>Add Student</Text>
+        }
       </TouchableOpacity>
     </View>
   );

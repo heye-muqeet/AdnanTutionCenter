@@ -31,18 +31,22 @@ const studentsData = [
 
 const MarkAttendence = () => {
   const [attendanceData, setAttendanceData] = useState([]);
-  const [selectedTab, setSelectedTab] = useState(0);
+  const [absentStd, setAbsentStd] = useState([]);
+  // const [selectedTab, setSelectedTab] = useState(0);
 
   const markAttendance = (studentId, status) => {
     const updatedAttendance = attendanceData.filter(
       item => item.id !== studentId,
-    );
-    updatedAttendance.push({id: studentId, status: status});
+
+      );
+      updatedAttendance.push({id: studentId, status: status});
+      setAbsentStd(prev => [...prev, studentId]);
     setAttendanceData(updatedAttendance);
   };
 
   const handleSubmit = () => {
     console.log('Attendance Data:');
+    console.log(absentStd);
     console.log(attendanceData);
     // Here you can send the attendance data to your backend or perform any other action
     // Reset attendance data
@@ -51,12 +55,12 @@ const MarkAttendence = () => {
 
   return (
     // <View style={styles.container}>
-      <ScrollView style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text style={styles.mainHeading}>Attendance Sheet</Text>
 
       {studentsData.map(student => (
-        <View style={styles.subContainer}>
-          <View key={student.id} style={styles.mainView}>
+        <View key={student.id} style={styles.subContainer}>
+          <View style={styles.mainView}>
             <Text style={styles.stdName}>{student.name}</Text>
             <View
               style={{
@@ -73,22 +77,28 @@ const MarkAttendence = () => {
                   width: '50%',
                   height: 30,
                   borderRadius: 15,
-                  backgroundColor:
-                    selectedTab == 0 ? colors.primary : colors.white,
+                  backgroundColor: absentStd.includes(student.id)
+                    ? colors.white
+                    : colors.primary,
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}
                 onPress={() => {
-                  setSelectedTab(0);
-                  markAttendance(student.id, 'Present')
+                  // setSelectedTab(0);
+                  const tempArray =absentStd.filter(item => item !== student.id);
+                  console.log(tempArray);
+                  setAbsentStd(tempArray);
+                  markAttendance(student.id, 'Present');
                 }}>
                 <Text
                   style={{
-                    color: selectedTab == 0 ? colors.white : colors.black,
+                    color: absentStd.includes(student.id)
+                      ? colors.black
+                      : colors.white,
                     fontSize: 15,
                     fontWeight: 700,
                   }}>
-                  Present
+                  Presen
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -96,15 +106,24 @@ const MarkAttendence = () => {
                   width: '50%',
                   height: 30,
                   borderRadius: 15,
-                  backgroundColor: selectedTab == 1 ? colors.primary : colors.white,
+                  backgroundColor: absentStd.includes(student.id)
+                    ? colors.primary
+                    : colors.white,
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}
                 onPress={() => {
-                  setSelectedTab(1);
+                  // setSelectedTab(1);
                   markAttendance(student.id, 'Absent');
                 }}>
-                <Text style={{color: selectedTab == 1 ? colors.white : colors.black, fontSize: 15, fontWeight: 700}}>
+                <Text
+                  style={{
+                    color: absentStd.includes(student.id)
+                      ? colors.white
+                      : colors.black,
+                    fontSize: 15,
+                    fontWeight: 700,
+                  }}>
                   Absent
                 </Text>
               </TouchableOpacity>
