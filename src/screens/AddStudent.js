@@ -118,6 +118,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: 30,
     paddingLeft: 15,
+    borderWidth: 0.3,
     // textopacity: 0.2,
   },
 
