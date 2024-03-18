@@ -20,7 +20,7 @@ const AddStudent = () => {
   const [loader, setLoader] = useState(false);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} >
       <Text style={styles.mainHeading}>New Student Form</Text>
 
       <Text style={styles.label}>Name</Text>
@@ -83,7 +83,7 @@ const AddStudent = () => {
             setBoard('');
             setPhone('');
             setEmail('');
-            ToastAndroid.show("Student Successfully Added!", ToastAndroid.SHORT);
+            ToastAndroid.showWithGravity("Student Successfully Added!", ToastAndroid.SHORT, ToastAndroid.TOP);
           },2000)
         }
 

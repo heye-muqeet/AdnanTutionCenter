@@ -1,13 +1,13 @@
 import {
-  Button,
+  ActivityIndicator,
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import colors from '../constants/globalstyles';
 
 const studentsData = [
@@ -31,121 +31,130 @@ const studentsData = [
 
 const MarkAttendence = () => {
   const [attendanceData, setAttendanceData] = useState([]);
-  const [absentStd, setAbsentStd] = useState([]);
-  // const [selectedTab, setSelectedTab] = useState(0);
+  const [loader, setLoader] = useState(false);
+
+  useEffect(() => {
+    const initialAttendance = studentsData.map(student => ({
+      id: student.id,
+      status: 'Present',
+    }));
+    setAttendanceData(initialAttendance);
+  }, []);
 
   const markAttendance = (studentId, status) => {
     const updatedAttendance = attendanceData.filter(
       item => item.id !== studentId,
-
-      );
-      updatedAttendance.push({id: studentId, status: status});
-      setAbsentStd(prev => [...prev, studentId]);
+    );
+    updatedAttendance.push({id: studentId, status: status});
     setAttendanceData(updatedAttendance);
   };
 
+  const onPressPresent = studentId => {
+    markAttendance(studentId, 'Present');
+  };
+  const onPressAbsent = studentId => {
+    markAttendance(studentId, 'Absent');
+  };
+
   const handleSubmit = () => {
-    console.log('Attendance Data:');
-    console.log(absentStd);
-    console.log(attendanceData);
-    // Here you can send the attendance data to your backend or perform any other action
-    // Reset attendance data
-    setAttendanceData([]);
+    setLoader(true);
+    setTimeout(() => {
+      setLoader(false);
+      console.log(attendanceData);
+
+      ToastAndroid.showWithGravity(
+        'Submitted Successfully!',
+        ToastAndroid.SHORT,
+        ToastAndroid.TOP,
+      );
+    }, 2000);
   };
 
   return (
-    // <View style={styles.container}>
     <ScrollView style={styles.container}>
       <Text style={styles.mainHeading}>Attendance Sheet</Text>
 
       {studentsData.map(student => (
         <View key={student.id} style={styles.subContainer}>
           <View style={styles.mainView}>
-            <Text style={styles.stdName}>{student.name}</Text>
-            <View
-              style={{
-                width: '50%',
-                height: 35,
-                borderWidth: 0.1,
-                borderRadius: 15,
-                flexDirection: 'row',
-                alignItems: 'center',
-                paddingHorizontal: 2.5,
-              }}>
+            <View style={styles.studentNameContainer}>
+              <Text style={styles.stdName}>{student.name}</Text>
+            </View>
+            <View style={styles.attendenceStatusContainer}>
               <TouchableOpacity
-                style={{
-                  width: '50%',
-                  height: 30,
-                  borderRadius: 15,
-                  backgroundColor: absentStd.includes(student.id)
-                    ? colors.white
-                    : colors.primary,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-                onPress={() => {
-                  // setSelectedTab(0);
-                  const tempArray =absentStd.filter(item => item !== student.id);
-                  console.log(tempArray);
-                  setAbsentStd(tempArray);
-                  markAttendance(student.id, 'Present');
-                }}>
-                <Text
-                  style={{
-                    color: absentStd.includes(student.id)
-                      ? colors.black
+                style={[
+                  styles.attendenceBtn,
+                  {
+                    backgroundColor: attendanceData.find(
+                      item =>
+                        item.id === student.id && item.status === 'Present',
+                    )
+                      ? colors.primary
                       : colors.white,
-                    fontSize: 15,
-                    fontWeight: 700,
-                  }}>
-                  Presen
+                  },
+                ]}
+                onPress={()=>{onPressPresent(student.id)}}
+                >
+                <Text
+                  style={[
+                    styles.attendenceBtnTxt,
+                    {
+                      color: attendanceData.find(
+                        item =>
+                          item.id === student.id && item.status === 'Present',
+                      )
+                        ? colors.white
+                        : colors.black,
+                    },
+                  ]}>
+                  Present
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={{
-                  width: '50%',
-                  height: 30,
-                  borderRadius: 15,
-                  backgroundColor: absentStd.includes(student.id)
-                    ? colors.primary
-                    : colors.white,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-                onPress={() => {
-                  // setSelectedTab(1);
-                  markAttendance(student.id, 'Absent');
-                }}>
+                style={[
+                  styles.attendenceBtn,
+                  {
+                    backgroundColor: attendanceData.find(
+                      item =>
+                        item.id === student.id && item.status === 'Absent',
+                    )
+                      ? colors.primary
+                      : colors.white,
+                  },
+                ]}
+                onPress={() => {onPressAbsent(student.id)}}
+                >
                 <Text
-                  style={{
-                    color: absentStd.includes(student.id)
-                      ? colors.white
-                      : colors.black,
-                    fontSize: 15,
-                    fontWeight: 700,
-                  }}>
+                  style={[
+                    styles.attendenceBtnTxt,
+                    {
+                      color: attendanceData.find(
+                        item =>
+                          item.id === student.id && item.status === 'Absent',
+                      )
+                        ? colors.white
+                        : colors.black,
+                    },
+                  ]}>
                   Absent
                 </Text>
               </TouchableOpacity>
             </View>
-
-            {/* <View style={styles.btnView}>
-            <TouchableOpacity style={styles.btnPresent} onPress={() => markAttendance(student.id, 'Present')}>
-              <Text style={styles.btntxt}>Present</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.btnAbsent} onPress={() => markAttendance(student.id, 'Absent')}>
-              <Text style={styles.btntxt}>Absent</Text>
-            </TouchableOpacity>
-          </View> */}
           </View>
         </View>
       ))}
 
-      <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
-        <Text style={styles.btntxt}>Submit</Text>
+      <TouchableOpacity
+        style={styles.btn}
+        disabled={loader}
+        onPress={handleSubmit}>
+        {loader ? (
+          <ActivityIndicator />
+        ) : (
+          <Text style={styles.btntxt}>Submit</Text>
+        )}
       </TouchableOpacity>
     </ScrollView>
-    // </View>
   );
 };
 
@@ -166,6 +175,12 @@ const styles = StyleSheet.create({
     marginVertical: 3,
   },
 
+  mainView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 10,
+  },
+
   mainHeading: {
     color: colors.black,
     textAlign: 'center',
@@ -174,44 +189,44 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
 
-  mainView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginVertical: 10,
-  },
-
-  btnView: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+  studentNameContainer:{
+    alignSelf: 'center',
+    width: '50%'
   },
 
   stdName: {
     color: colors.black,
-    textAlign: 'center',
     fontSize: 17,
     fontWeight: 'bold',
-    paddingTop: 5,
     marginLeft: 5,
-    // paddingTop: 10,
+    // paddingTop: 5,
+    // backgroundColor: colors.primary,
   },
 
-  btnPresent: {
-    backgroundColor: 'green',
-    // width: '',
-    marginLeft: 10,
-    padding: 10,
-    borderRadius: 5,
-    // alignSelf: 'center',
+  attendenceStatusContainer: {
+    width: '50%',
+    height: 35,
+    borderWidth: 0.1,
+    borderRadius: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 2.5,
+    alignSelf: 'center',
   },
 
-  btnAbsent: {
-    backgroundColor: 'red',
-    // width: '',
-    marginLeft: 10,
-    padding: 10,
-    borderRadius: 5,
-    // alignSelf: 'center',
+  attendenceBtn: {
+    width: '50%',
+    height: 30,
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
+
+  attendenceBtnTxt: {
+    fontSize: 15,
+    fontWeight: '700',
+  },
+
 
   btn: {
     backgroundColor: colors.primary,
@@ -229,29 +244,3 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
 });
-
-// const MarkAttendence = () => {
-
-//   const [stdName, setStdName] = useState();
-//   const [attendanceStatus, setAttendanceStatus] = useState();
-
-//   return (
-//     <View style={styles.container}>
-//       <Text style={{ fontSize: 20, marginBottom: 10 }}>Mark Attendance</Text>
-//       <TextInput
-//         style={{ marginBottom: 10, height: 40, borderColor: 'gray', borderWidth: 1, padding: 5 }}
-//         placeholder="Enter Student Name"
-//         value={stdName}
-//         onChangeText={(text)=>setStdName(text)}
-//       />
-//       <Text>Attendance Status:</Text>
-//       <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginBottom: 10 }}>
-//         <Button title="Present" onPress={() => setAttendanceStatus('Present')} />
-//         <Button title="Absent" onPress={() => setAttendanceStatus('Absent')} />
-//       </View>
-//       <Button title="Submit" onPress={()=>{}} />
-//     </View>
-//   )
-// }
-
-// export default MarkAttendence
