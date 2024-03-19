@@ -29,11 +29,14 @@ const studentsData = [
   // Add more students as needed
 ];
 
-const MarkAttendence = () => {
+const MarkAttendence = ({route}) => {
   const [attendanceData, setAttendanceData] = useState([]);
   const [loader, setLoader] = useState(false);
+  const {board, classes} = route.params;
 
   useEffect(() => {
+    console.log(board)
+    console.log(classes)
     const initialAttendance = studentsData.map(student => ({
       id: student.id,
       status: 'Present',

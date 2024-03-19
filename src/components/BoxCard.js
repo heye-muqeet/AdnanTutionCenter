@@ -2,7 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import colors from '../constants/globalstyles'
 
-const card = ({text, navigate}) => {
+const BoxCard = ({text, navigate}) => {
   return (
     <View>
       <TouchableOpacity style={styles.button} onPress={navigate}>
@@ -13,7 +13,7 @@ const card = ({text, navigate}) => {
 };
 
 
-export default card
+export default BoxCard
 
 const styles = StyleSheet.create({
     button:{
