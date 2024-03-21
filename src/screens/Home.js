@@ -9,15 +9,15 @@ const Home = ({navigation}) => {
       <View style={styles.container}>
         <BoxCard
           text={'Add\nStudent'}
-          navigate={() => navigation.navigate('AddStudent')}
+          navigate={() => navigation.navigate('AddStudent', {menuItem: '1'})}
         />
         <BoxCard
           text={'Mark\nAttendence'}
-          navigate={() => navigation.navigate('ClassSelection')}
+          navigate={() => navigation.navigate('ClassSelection' , {menuItem: '2'})}
         />
         <BoxCard
           text={'Exam\nDetails'}
-          navigate={() => navigation.navigate('ExamDetails')}
+          navigate={() => navigation.navigate('ClassSelection', {menuItem: '3'})}
         />
       </View>
     </View>

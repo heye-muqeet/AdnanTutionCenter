@@ -8,6 +8,7 @@ import colors from './src/constants/globalstyles';
 import MarkAttendence from './src/screens/MarkAttendence';
 import ExamDetails from './src/screens/ExamDetails';
 import ClassSelection from './src/screens/ClassSelection';
+import NewExam from './src/screens/NewExam';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +21,7 @@ function App() {
         <Stack.Screen options={{title: "Mark Attendence"}}name = "MarkAttendence" component={MarkAttendence}/>
         <Stack.Screen options={{title: "Exam Details"}}name = "ExamDetails" component={ExamDetails}/> 
         <Stack.Screen options={{title: "Select Class"}}name = "ClassSelection" component={ClassSelection}/> 
+        <Stack.Screen options={{title: "New Exam"}}name = "NewExam" component={NewExam}/> 
       </Stack.Navigator>
     </NavigationContainer>
   );

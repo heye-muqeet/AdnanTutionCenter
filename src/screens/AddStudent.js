@@ -7,17 +7,20 @@ import {
   ToastAndroid,
   TouchableOpacity,
   View,
-} from 'react-native';
+} from 'react-native'; 
 import React, { useState } from 'react';
 import colors from '../constants/globalstyles';
 
-const AddStudent = () => {
+const AddStudent = ({route}) => {
   const [stdName, setName] = useState('');
   const [stdClass, setClass] = useState('');
   const [stdBoard, setBoard] = useState('');
   const [stdPhone, setPhone] = useState('');
   const [stdEmail, setEmail] = useState('');
   const [loader, setLoader] = useState(false);
+  const {menuItem} = route.params;
+  
+  console.log(menuItem);
 
   return (
     <View style={styles.container} >
@@ -108,6 +111,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: colors.secondary,
   },
+  
   mainHeading: {
     color: colors.black,
     textAlign: 'center',

@@ -10,28 +10,42 @@ const availableClasses = [
   {id: 4, name: '12th', src: require('../assets/images/12th.png')},
 ];
 
-console.log(availableClasses[0].src)
+console.log(availableClasses[0].src);
 
 const availableBoards = [
   {id: 1, name: 'Federal Board', code: 'FB'},
   {id: 2, name: 'Sindh Board', code: 'KB'},
 ];
 
-const ClassSelection = ({navigation}) => {
+const ClassSelection = ({route, navigation}) => {
+  const {menuItem} = route.params;
+
+  console.log(menuItem);
   return (
     <ScrollView style={{flex: 1}}>
       {availableBoards.map(board => (
         <View key={board.id} style={styles.container}>
           <Text style={styles.board}>{board.name}</Text>
 
-            {availableClasses.map(classes => (
-                <HorizontalCard key={classes.id}
-                style={styles.card}
-                imgSrc={classes.src}
-                text={'Class ' + classes.name + ' (' + board.code + ')'}
-                navigate={() => navigation.navigate('MarkAttendence', {board: board.id, classes: classes.id})}
-              />
-            ))}
+          {availableClasses.map(classes => (
+            <HorizontalCard
+              key={classes.id}
+              style={styles.card}
+              imgSrc={classes.src}
+              text={'Class ' + classes.name + ' (' + board.code + ')'}
+              navigate={() =>
+                menuItem === '2'
+                  ? navigation.navigate('MarkAttendence', {
+                      board: board.id,
+                      classes: classes.id,
+                    })
+                  : navigation.navigate('NewExam', {
+                      board: board.id,
+                      classes: classes.id,
+                    })
+              }
+            />
+          ))}
         </View>
       ))}
     </ScrollView>
@@ -45,6 +59,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: colors.secondary,
+    // flexDirection: 'row'
   },
 
   board: {

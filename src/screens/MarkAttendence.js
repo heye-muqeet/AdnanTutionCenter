@@ -11,7 +11,7 @@ import React, {useEffect, useState} from 'react';
 import colors from '../constants/globalstyles';
 
 const studentsData = [
-  {id: 1, name: 'Abdul Muqeet'},
+  {id: 1, name: 'Abdul Muqeet Khanhuihuihuih iuui ui hui u hn '},
   {id: 2, name: 'M Jahanzaib'},
   {id: 3, name: 'Moon'},
   {id: 4, name: 'Mughal'},
@@ -35,8 +35,8 @@ const MarkAttendence = ({route}) => {
   const {board, classes} = route.params;
 
   useEffect(() => {
-    console.log(board)
-    console.log(classes)
+    // console.log(board)
+    // console.log(classes)
     const initialAttendance = studentsData.map(student => ({
       id: student.id,
       status: 'Present',
