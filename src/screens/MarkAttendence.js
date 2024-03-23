@@ -96,8 +96,9 @@ const MarkAttendence = ({route}) => {
                       : colors.white,
                   },
                 ]}
-                onPress={()=>{onPressPresent(student.id)}}
-                >
+                onPress={() => {
+                  onPressPresent(student.id);
+                }}>
                 <Text
                   style={[
                     styles.attendenceBtnTxt,
@@ -125,8 +126,9 @@ const MarkAttendence = ({route}) => {
                       : colors.white,
                   },
                 ]}
-                onPress={() => {onPressAbsent(student.id)}}
-                >
+                onPress={() => {
+                  onPressAbsent(student.id);
+                }}>
                 <Text
                   style={[
                     styles.attendenceBtnTxt,
@@ -192,9 +194,9 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
 
-  studentNameContainer:{
+  studentNameContainer: {
     alignSelf: 'center',
-    width: '50%'
+    width: '50%',
   },
 
   stdName: {
@@ -229,7 +231,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '700',
   },
-
 
   btn: {
     backgroundColor: colors.primary,

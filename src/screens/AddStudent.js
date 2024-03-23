@@ -7,8 +7,8 @@ import {
   ToastAndroid,
   TouchableOpacity,
   View,
-} from 'react-native'; 
-import React, { useState } from 'react';
+} from 'react-native';
+import React, {useState} from 'react';
 import colors from '../constants/globalstyles';
 
 const AddStudent = ({route}) => {
@@ -19,11 +19,11 @@ const AddStudent = ({route}) => {
   const [stdEmail, setEmail] = useState('');
   const [loader, setLoader] = useState(false);
   const {menuItem} = route.params;
-  
+
   console.log(menuItem);
 
   return (
-    <View style={styles.container} >
+    <View style={styles.container}>
       <Text style={styles.mainHeading}>New Student Form</Text>
 
       <Text style={styles.label}>Name</Text>
@@ -31,7 +31,7 @@ const AddStudent = ({route}) => {
         style={styles.textInput}
         placeholder="Enter Student Name"
         placeholderTextColor={'grey'}
-        onChangeText={(text)=>setName(text)}
+        onChangeText={text => setName(text)}
         value={stdName}
       />
 
@@ -40,7 +40,7 @@ const AddStudent = ({route}) => {
         style={styles.textInput}
         placeholder="Class"
         placeholderTextColor={'grey'}
-        onChangeText={(text)=>setClass(text)}
+        onChangeText={text => setClass(text)}
         value={stdClass}
       />
 
@@ -49,7 +49,7 @@ const AddStudent = ({route}) => {
         style={styles.textInput}
         placeholder="Enter Board"
         placeholderTextColor={'grey'}
-        onChangeText={(text)=>setBoard(text)}
+        onChangeText={text => setBoard(text)}
         value={stdBoard}
       />
 
@@ -58,7 +58,7 @@ const AddStudent = ({route}) => {
         style={styles.textInput}
         placeholder="Enter Phone Number"
         placeholderTextColor={'grey'}
-        onChangeText={(text)=>setPhone(text)}
+        onChangeText={text => setPhone(text)}
         value={stdPhone}
       />
 
@@ -67,37 +67,46 @@ const AddStudent = ({route}) => {
         style={styles.textInput}
         placeholder="Enter Email"
         placeholderTextColor={'grey'}
-        onChangeText={(text)=>setEmail(text)}
+        onChangeText={text => setEmail(text)}
         value={stdEmail}
       />
 
-      <TouchableOpacity style={styles.btn} disabled={loader} onPress={()=>{
-        if(stdName != '')
-        {
-          setLoader(true);
-          setTimeout(()=>{
-            setLoader(false);
-            const data = {
-              stdName, stdClass, stdBoard, stdPhone, stdEmail
-            };
-            console.log(data);
-            setName('');
-            setClass('');
-            setBoard('');
-            setPhone('');
-            setEmail('');
-            ToastAndroid.showWithGravity("Student Successfully Added!", ToastAndroid.SHORT, ToastAndroid.TOP);
-          },2000)
-        }
-
-        else{
-          Alert.alert('Error', 'Name should not be empty!');
-        }
-
-      }}>
-        {loader ? <ActivityIndicator/> :
-        <Text style={styles.btntxt}>Add Student</Text>
-        }
+      <TouchableOpacity
+        style={styles.btn}
+        disabled={loader}
+        onPress={() => {
+          if (stdName != '') {
+            setLoader(true);
+            setTimeout(() => {
+              setLoader(false);
+              const data = {
+                stdName,
+                stdClass,
+                stdBoard,
+                stdPhone,
+                stdEmail,
+              };
+              console.log(data);
+              setName('');
+              setClass('');
+              setBoard('');
+              setPhone('');
+              setEmail('');
+              ToastAndroid.showWithGravity(
+                'Student Successfully Added!',
+                ToastAndroid.SHORT,
+                ToastAndroid.TOP,
+              );
+            }, 2000);
+          } else {
+            Alert.alert('Error', 'Name should not be empty!');
+          }
+        }}>
+        {loader ? (
+          <ActivityIndicator />
+        ) : (
+          <Text style={styles.btntxt}>Add Student</Text>
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -111,7 +120,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: colors.secondary,
   },
-  
+
   mainHeading: {
     color: colors.black,
     textAlign: 'center',
