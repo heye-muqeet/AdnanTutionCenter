@@ -11,7 +11,7 @@ import React, {useEffect, useState} from 'react';
 import colors from '../constants/globalstyles';
 
 const studentsData = [
-  {id: 1, name: 'Abdul Muqeet Khanhuihuihuih iuui ui hui u hn '},
+  {id: 1, name: 'Abdul Muqeet'},
   {id: 2, name: 'M Jahanzaib'},
   {id: 3, name: 'Moon'},
   {id: 4, name: 'Mughal'},
@@ -25,6 +25,7 @@ const studentsData = [
   {id: 12, name: 'Rsahida'},
   {id: 13, name: 'Noor Jahan'},
   {id: 14, name: 'Muhammad Ali'},
+  {id: 15, name: 'Muhammad Hamza Khanzada'},
 
   // Add more students as needed
 ];

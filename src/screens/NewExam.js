@@ -11,7 +11,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 // import DateTimePicker from 'react-native-ui-datepicker';
 // import { Dayjs } from 'dayjs';
 
-const NewExam = ({route}) => {
+const NewExam = ({route, navigation}) => {
   // const [date, setDate] = useState(Dayjs);
   // console.log(date)
 
@@ -37,7 +37,7 @@ const NewExam = ({route}) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.mainHeading}>New Exam Form</Text>
+      <Text style={styles.mainHeading}>New Exam Details</Text>
 
       <Text style={styles.label}>Date</Text>
       <View style={styles.datePickier}>
@@ -46,8 +46,8 @@ const NewExam = ({route}) => {
           placeholder="Pik an exam date    ------>"
           placeholderTextColor={'grey'}
           editable={false}
-        />
-        <TouchableOpacity style={styles.btnPik} onPress={showDatePicker}>
+          
+          /><TouchableOpacity style={styles.btnPik} onPress={showDatePicker}>
           <Text style={styles.textBtnPik}>Pik a date</Text>
         </TouchableOpacity>
         {/* <DateTimePickerModal
@@ -86,7 +86,7 @@ const NewExam = ({route}) => {
         placeholderTextColor={'grey'}
       />
 
-      <TouchableOpacity style={styles.btn}>
+      <TouchableOpacity style={styles.btn} onPress={()=>{navigation.navigate("ExamMarks")}}>
         <Text style={styles.btntxt}>Next</Text>
       </TouchableOpacity>
     </View>

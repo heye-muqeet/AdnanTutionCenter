@@ -6,7 +6,7 @@ import Home from './src/screens/Home';
 import AddStudent from './src/screens/AddStudent'
 import colors from './src/constants/globalstyles';
 import MarkAttendence from './src/screens/MarkAttendence';
-import ExamDetails from './src/screens/ExamDetails';
+import ExamMarks from './src/screens/ExamMarks';
 import ClassSelection from './src/screens/ClassSelection';
 import NewExam from './src/screens/NewExam';
 
@@ -19,7 +19,7 @@ function App() {
         <Stack.Screen options={{title: "Adnan Tution Center"}} name="Home" component={Home} />
         <Stack.Screen options={{title: "Add Student"}} name="AddStudent" component={AddStudent} />
         <Stack.Screen options={{title: "Mark Attendence"}}name = "MarkAttendence" component={MarkAttendence}/>
-        <Stack.Screen options={{title: "Exam Details"}}name = "ExamDetails" component={ExamDetails}/> 
+        <Stack.Screen options={{title: "Exam Marks"}}name = "ExamMarks" component={ExamMarks}/> 
         <Stack.Screen options={{title: "Select Class"}}name = "ClassSelection" component={ClassSelection}/> 
         <Stack.Screen options={{title: "New Exam"}}name = "NewExam" component={NewExam}/> 
       </Stack.Navigator>
