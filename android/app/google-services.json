@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "466385969346",
+    "project_id": "adnan-tution-center",
+    "storage_bucket": "adnan-tution-center.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:466385969346:android:1499f5c9ffeed7ae045b5b",
+        "android_client_info": {
+          "package_name": "com.adnantutioncenter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6AV_2-E4TiXvaXamKMblloF5x4jSidhY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
