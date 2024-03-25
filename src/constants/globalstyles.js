@@ -7,3 +7,9 @@ export default colors = {
     white: '#fff'
   };
   
+  const debugIp ={
+    MughalPC: '192.168.0.104',
+    MughalWifi: '192.168.0.105',
+    Edurom: '',
+    ZebiHomeWifi: '192.468.100.10'
+  }

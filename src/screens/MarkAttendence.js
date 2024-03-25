@@ -36,8 +36,8 @@ const MarkAttendence = ({route}) => {
   const {board, classes} = route.params;
 
   useEffect(() => {
-    // console.log(board)
-    // console.log(classes)
+    console.log(board)
+    console.log(classes)
     const initialAttendance = studentsData.map(student => ({
       id: student.id,
       status: 'Present',

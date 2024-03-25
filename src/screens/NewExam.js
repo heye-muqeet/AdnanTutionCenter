@@ -1,7 +1,10 @@
 import {
+  ActivityIndicator,
+  Alert,
   StyleSheet,
   Text,
   TextInput,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -12,13 +15,21 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 // import { Dayjs } from 'dayjs';
 
 const NewExam = ({route, navigation}) => {
+  const [date, setDate] = useState('');
+  const [title, setTitle] = useState('');
+  const [subject, setSubject] = useState('');
+  const [topic, setTopic] = useState('');
+  const [totalMarks, setTotalMarks] = useState('');
+  const [loader, setLoader] = useState(false);
+  const [disableNext, setDisableNext] = useState(true);
+
   // const [date, setDate] = useState(Dayjs);
   // console.log(date)
 
   const {board, classes} = route.params;
 
-  // console.log(board);
-  // console.log(classes);
+  console.log('Board: ', board);
+  console.log('Class: ', classes);
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
@@ -30,8 +41,22 @@ const NewExam = ({route, navigation}) => {
     setDatePickerVisibility(false);
   };
 
-  const handleConfirm = date => {
-    console.warn('A date has been picked: ', date);
+  const handleConfirm = data => {
+    const dateStr = new Date(data);
+
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+  
+    const day = days[dateStr.getDay()];
+    const dd = String(dateStr.getDate()).padStart(2, '0');
+    const mm = months[dateStr.getMonth()];
+    const yyyy = dateStr.getFullYear();
+  
+    const date =  `${day}, ${dd}-${mm}-${yyyy}`;
+
+    console.log('A date has been picked: ', date);
+
+    setDate(date);
     hideDatePicker();
   };
 
@@ -46,16 +71,17 @@ const NewExam = ({route, navigation}) => {
           placeholder="Pik an exam date    ------>"
           placeholderTextColor={'grey'}
           editable={false}
-          
-          /><TouchableOpacity style={styles.btnPik} onPress={showDatePicker}>
-          <Text style={styles.textBtnPik}>Pik a date</Text>
+          value={date}
+        />
+        <TouchableOpacity style={styles.btnPik} onPress={showDatePicker}>
+          <Text style={styles.btnText}>Pik a date</Text>
         </TouchableOpacity>
-        {/* <DateTimePickerModal
+        <DateTimePickerModal
         isVisible={isDatePickerVisible}
-        mode="date"
+        mode = 'date'
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
-        /> */}
+        />
       </View>
 
       <Text style={styles.label}>Title</Text>
@@ -63,6 +89,8 @@ const NewExam = ({route, navigation}) => {
         style={styles.textInput}
         placeholder="Enter Exam Title"
         placeholderTextColor={'grey'}
+        onChangeText={text => setTitle(text)}
+        value={title}
       />
 
       <Text style={styles.label}>Subject</Text>
@@ -70,6 +98,8 @@ const NewExam = ({route, navigation}) => {
         style={styles.textInput}
         placeholder="Enter Subject Name"
         placeholderTextColor={'grey'}
+        onChangeText={text => setSubject(text)}
+        value={subject}
       />
 
       <Text style={styles.label}>Topic</Text>
@@ -77,6 +107,8 @@ const NewExam = ({route, navigation}) => {
         style={styles.textInput}
         placeholder="Enter Topics Covered in Exam"
         placeholderTextColor={'grey'}
+        onChangeText={text => setTopic(text)}
+        value={topic}
       />
 
       <Text style={styles.label}>Total Marks</Text>
@@ -84,11 +116,65 @@ const NewExam = ({route, navigation}) => {
         style={styles.textInput}
         placeholder="Enter Total Marks"
         placeholderTextColor={'grey'}
+        onChangeText={text => setTotalMarks(text)}
+        value={totalMarks}
       />
 
-      <TouchableOpacity style={styles.btn} onPress={()=>{navigation.navigate("ExamMarks")}}>
-        <Text style={styles.btntxt}>Next</Text>
-      </TouchableOpacity>
+      <View style={styles.btnContainer}>
+        <TouchableOpacity
+          style={styles.btnLeft}
+          disabled={loader}
+          onPress={() => {
+            if (
+              (date != '',
+              title != '',
+              subject != '',
+              topic != '',
+              totalMarks != '')
+            ) {
+              setLoader(true);
+              setTimeout(() => {
+                setLoader(false);
+                const data = {
+                  date,
+                  title,
+                  subject,
+                  topic,
+                  totalMarks,
+                };
+                console.log(data);
+                setDate('');
+                setTitle('');
+                setSubject('');
+                setTopic('');
+                setTotalMarks('');
+                ToastAndroid.showWithGravity(
+                  'Saved Successfully!',
+                  ToastAndroid.SHORT,
+                  ToastAndroid.TOP,
+                );
+                setDisableNext(false);
+              }, 2000);
+            } else {
+              Alert.alert('Error', 'All fields must be filled up!');
+            }
+          }}>
+          {loader ? (
+            <ActivityIndicator />
+          ) : (
+            <Text style={styles.btnText}>Save</Text>
+          )}
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.btnRight}
+          onPress={() => {
+            navigation.navigate('ExamMarks');
+          }}
+          disabled={disableNext}>
+          <Text style={styles.btnText}>Next</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -133,23 +219,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
   },
 
-  textBtnPik: {
-    color: colors.white,
-    alignSelf: 'center',
-    fontWeight: '700',
-    fontSize: 15,
-  },
-
   dateInput: {
     width: '70%',
     color: colors.black,
     backgroundColor: colors.white,
-    // borderRadius: 30,
     paddingLeft: 15,
     borderBottomLeftRadius: 30,
     borderTopLeftRadius: 30,
-    // borderWidth: 0.3,
-    // textopacity: 0.2,
   },
 
   textInput: {
@@ -159,24 +235,49 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     paddingLeft: 15,
     borderWidth: 0.3,
-    // textopacity: 0.2,
   },
 
-  btn: {
-    backgroundColor: colors.primary,
-    width: '30%',
-    marginTop: 40,
-    padding: 10,
-    borderRadius: 20,
+  btnContainer: {
+    width: '50%',
+    marginTop: 30,
+    height: 50,
+    flexDirection: 'row',
+    alignItems: 'center',
     alignSelf: 'center',
-    // flexDirection: 'row',
-    // justifyContent: 'flex-end',
-    // textAlign: 'center',
   },
 
-  btntxt: {
+  btnLeft: {
+    backgroundColor: colors.primary,
+    padding: 10,
+    width: '50%',
+    height: 45,
+    borderWidth: 0.2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderTopLeftRadius: 30,
+    borderBottomLeftRadius: 30,
+    backgroundColor: colors.primary,
+  },
+
+  btnRight: {
+    backgroundColor: colors.primary,
+    padding: 10,
+    borderWidth: 0.2,
+    width: '50%',
+    height: 45,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderTopRightRadius: 30,
+    borderBottomRightRadius: 30,
+    backgroundColor: colors.primary,
+  },
+
+  btnText: {
     fontWeight: '700',
-    color: colors.secondary,
     textAlign: 'center',
+    color: colors.white,
+    alignSelf: 'center',
+    fontWeight: '700',
+    fontSize: 16,
   },
 });

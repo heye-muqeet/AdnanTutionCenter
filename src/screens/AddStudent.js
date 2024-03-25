@@ -33,7 +33,7 @@ const AddStudent = ({route}) => {
         placeholderTextColor={'grey'}
         onChangeText={text => setName(text)}
         value={stdName}
-      />
+      />  
 
       <Text style={styles.label}>Class</Text>
       <TextInput
@@ -75,7 +75,7 @@ const AddStudent = ({route}) => {
         style={styles.btn}
         disabled={loader}
         onPress={() => {
-          if (stdName != '') {
+          if (stdName != '' && stdClass != '' && stdBoard != '') {
             setLoader(true);
             setTimeout(() => {
               setLoader(false);
@@ -99,7 +99,7 @@ const AddStudent = ({route}) => {
               );
             }, 2000);
           } else {
-            Alert.alert('Error', 'Name should not be empty!');
+            Alert.alert('Error', 'Name, Class or Board should not be empty!');
           }
         }}>
         {loader ? (

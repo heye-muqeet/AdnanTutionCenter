@@ -1,0 +1,87 @@
+import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React from 'react'
+import colors from '../constants/globalstyles';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+const Head = () => {
+
+  return (
+    <View style={styles.container}>
+      <StatusBar hidden={true}/>
+      <View style={styles.uperContainer}>
+        <Image style={styles.logo} source={require('../assets/icons/atc.png')}></Image>
+        <Text style={styles.motoTxt}>learn today, lead</Text>
+        <Text style={styles.motoTxt}>tomorrow</Text>
+      </View>
+      <View style = {styles.lowerContainer}>
+        <TouchableOpacity style={styles.loginBtn}>
+          <Text style={styles.btnTxt}>Login</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.signupBtn}>
+          <Text style={styles.btnTxt}>Sign Up</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  )
+}
+
+export default Head
+
+const styles = StyleSheet.create({
+  container:{
+    flex:1,
+    backgroundColor: colors.secondary,
+  },
+
+  uperContainer:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex:0.6,
+  },
+  
+  logo:{
+    marginTop: 50,
+    height: 200,
+    width: 200,
+    // alignContent: 'center',
+    // marginBottom: 20,
+  },
+
+  motoTxt:{
+    color: colors.primary,
+    fontSize: 12,
+    fontWeight: '700',
+    fontStyle: 'italic',
+  },
+
+  lowerContainer:{
+    flex: 0.4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.primary,
+    borderTopLeftRadius: 30, 
+    borderTopRightRadius: 30,
+  },
+
+  loginBtn:{
+    backgroundColor: colors.dark,
+    width: '70%',
+    borderRadius: 15,
+    marginBottom: 10, 
+  },
+
+  signupBtn:{
+    borderColor: colors.dark,
+    borderWidth: 1,
+    width: '70%',
+    borderRadius: 15,
+  },
+
+  btnTxt:{
+    textAlign:  'center',
+    fontSize: 17,
+    fontWeight: '700',
+    paddingVertical: 15,
+  },
+})
