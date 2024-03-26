@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import colors from '../constants/globalstyles';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+
 
 const Head = ({navigation}) => {
   return (

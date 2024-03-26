@@ -1,6 +1,6 @@
 export default colors = {
     primary: '#176B87',
-    dark: '#86B6F6',
+    dark: '#64A5FA',
     light: '#B4D4FF',
     secondary: '#EEF5FF',
     black: '#000',
@@ -10,6 +10,7 @@ export default colors = {
   const debugIp ={
     MughalPC: '192.168.0.104',
     MughalWifi: '192.168.0.105',
-    Edurom: '',
+    OppoHotspot: '192.168.251.84', 
+    Edurom: '10.133.148.14',
     ZebiHomeWifi: '192.468.100.10'
   }

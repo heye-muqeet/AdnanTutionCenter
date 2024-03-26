@@ -25,18 +25,26 @@ function App() {
           options={{
             headerShown: false,
             statusBarColor: colors.secondary,
-            statusBarStyle: 'dark'
+            statusBarStyle: 'dark',
           }}
           name="Head"
           component={Head}
         />
         <Stack.Screen
-          options={{headerShown: false}}
+          options={{
+            headerShown: false,
+            statusBarColor: colors.secondary,
+            statusBarStyle: 'dark',
+          }}
           name="Login"
           component={Login}
         />
         <Stack.Screen
-          options={{headerShown: false}}
+          options={{
+            headerShown: false,
+            statusBarColor: colors.secondary,
+            statusBarStyle: 'dark',
+          }}
           name="Signup"
           component={Signup}
         />
