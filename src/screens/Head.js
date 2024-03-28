@@ -18,8 +18,8 @@ const Head = ({navigation}) => {
         <Image
           style={styles.logo}
           source={require('../assets/icons/atc.png')}></Image>
-        <Text style={styles.motoTxt}>learn today, lead</Text>
-        <Text style={styles.motoTxt}>tomorrow</Text>
+        <Text style={styles.motoTxt}> learn today, lead </Text>
+        <Text style={styles.motoTxt}> tomorrow </Text>
       </View>
       <View style={styles.lowerContainer}>
           <TouchableOpacity
@@ -60,8 +60,6 @@ const styles = StyleSheet.create({
     marginTop: 50,
     height: 220,
     width: 220,
-    // alignContent: 'center',
-    // marginBottom: 20,
   },
 
   motoTxt: {
