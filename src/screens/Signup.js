@@ -1,4 +1,6 @@
 import {
+  ActivityIndicator,
+  Alert,
   Image,
   StatusBar,
   StyleSheet,
@@ -9,11 +11,43 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import colors from '../constants/globalstyles';
+import {signupAuth} from '../utils/auth';
 
 const Signup = ({navigation}) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loader, setLoader] = useState(false);
+
+  const handleSubmit = async () => {
+    if (!name) return Alert.alert('REQUIRED', 'Please fill Name');
+    if (!email) return Alert.alert('REQUIRED', 'Please fill Email');
+    if (!password) return Alert.alert('REQUIRED', 'Please fill Password');
+    if (password.length <= 6)
+      return Alert.alert(
+        'WEEK PASSWORD',
+        'Password should be atleast 6 characters',
+      );
+    setLoader(true);
+    try {
+      const user = await signupAuth(name, email, password);
+
+      console.log(user);
+      const data = {name, email, password};
+      console.log(data);
+      setLoader(false);
+      if (user) navigation.replace('Login');
+    } catch (error) {
+      setLoader(false);
+      if (error.code === 'auth/email-already-in-use') {
+        Alert.alert('ERROR', 'That email address is already in use!');
+        console.log('That email address is already in use!');
+      } else if (error.code === 'auth/invalid-email') {
+        Alert.alert('ERROR', 'That email address is invalid!');
+        console.log('That email address is invalid!');
+      }
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -56,7 +90,7 @@ const Signup = ({navigation}) => {
             style={styles.textInput}
             placeholder="Enter Your Name"
             placeholderTextColor={'#89C2D6'}
-            onChange={text => {
+            onChangeText={text => {
               setName(text);
             }}
             value={name}
@@ -67,7 +101,7 @@ const Signup = ({navigation}) => {
             style={styles.textInput}
             placeholder="Enter Your Email"
             placeholderTextColor={'#89C2D6'}
-            onChange={text => {
+            onChangeText={text => {
               setEmail(text);
             }}
             value={email}
@@ -76,19 +110,28 @@ const Signup = ({navigation}) => {
           <Text style={styles.label}>PASSWORD</Text>
           <TextInput
             style={styles.textInput}
+            secureTextEntry={true}
             placeholder="Enter Password"
             placeholderTextColor={'#89C2D6'}
-            onChange={text => {
+            onChangeText={text => {
               setPassword(text);
             }}
             value={password}
           />
 
-          <TouchableOpacity style={styles.signupBtn} onPress={() => {
-            const data = {name, email, password};
-            console.log(data);
-          }}>
-            <Text style={styles.btnTxt}>Sign Up</Text>
+          <TouchableOpacity
+            style={styles.signupBtn}
+            disabled={loader}
+            onPress={handleSubmit}>
+            {loader ? (
+              <ActivityIndicator
+                style={styles.btnTxt}
+                size={27}
+                color={colors.white}
+              />
+            ) : (
+              <Text style={styles.btnTxt}>Sign Up</Text>
+            )}
           </TouchableOpacity>
         </View>
 

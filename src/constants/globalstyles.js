@@ -12,5 +12,5 @@ export default colors = {
     MughalWifi: '192.168.0.105',
     OppoHotspot: '192.168.251.84', 
     Edurom: '10.133.148.14',
-    ZebiHomeWifi: '192.468.100.10'
+    ZebiHomeWifi: '192.168.100.10'
   }
