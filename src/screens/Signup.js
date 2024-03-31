@@ -31,7 +31,6 @@ const Signup = ({navigation}) => {
     setLoader(true);
     try {
       const user = await signupAuth(name, email, password);
-
       console.log(user);
       const data = {name, email, password};
       console.log(data);
@@ -39,13 +38,6 @@ const Signup = ({navigation}) => {
       if (user) navigation.replace('Login');
     } catch (error) {
       setLoader(false);
-      if (error.code === 'auth/email-already-in-use') {
-        Alert.alert('ERROR', 'That email address is already in use!');
-        console.log('That email address is already in use!');
-      } else if (error.code === 'auth/invalid-email') {
-        Alert.alert('ERROR', 'That email address is invalid!');
-        console.log('That email address is invalid!');
-      }
     }
   };
 

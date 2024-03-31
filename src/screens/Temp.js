@@ -47,6 +47,21 @@ const signup = async () => {
 
 
 
+import auth from '@react-native-firebase/auth';
+
+export const signInWithEmailAndPassword = async (email, password) => {
+  try {
+    const userCredential = await auth().signInWithEmailAndPassword(email, password);
+    return userCredential.user;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+
+
+
 
 
 
@@ -59,3 +74,32 @@ navigation.reset({
   index: 0,
   routes: [{name: 'Home'}],
 });
+
+
+
+if (!user.emailVerified) {
+  Alert.alert(
+    'Email Verification',
+    'Please verify your email before signing in. Do you want to resend the verification email?',
+    [
+      {
+        text: 'Resend',
+        onPress: async () => {
+          try {
+            await user.sendEmailVerification();
+            Alert.alert('Email Sent', 'Please check your email for verification.');
+          } catch (error) {
+            Alert.alert('Error', error.message);
+          }
+        },
+      },
+      {
+        text: 'Cancel',
+        onPress: () => {},
+        style: 'cancel',
+      },
+    ],
+    { cancelable: false }
+  );
+  return;
+}

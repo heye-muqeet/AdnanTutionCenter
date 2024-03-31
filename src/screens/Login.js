@@ -1,4 +1,6 @@
 import {
+  ActivityIndicator,
+  Alert,
   Image,
   StatusBar,
   StyleSheet,
@@ -9,9 +11,33 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import colors from '../constants/globalstyles';
+import {loginAuth} from '../utils/auth';
+
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loader, setLoader] = useState(false);
+
+  const handleSubmit = async () => {
+    if (!email) return Alert.alert('REQUIRED', 'Please fill Email');
+    if (!password) return Alert.alert('REQUIRED', 'Please fill Password');
+
+    setLoader(true);
+    try {
+      const user = await loginAuth(email, password);
+      const data = {email, password};
+      console.log(data);
+      setLoader(false);
+      if (user)
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Home'}],
+      });
+    } catch (error) {
+      setLoader(false);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar hidden={true} />
@@ -34,9 +60,8 @@ const Login = ({navigation}) => {
       </View>
 
       <View style={styles.lowerContainer}>
-
-          <Text style={styles.mainHeading}>Login</Text>
-          <Text style={styles.smallTxt}>Sign in to continue. </Text>
+        <Text style={styles.mainHeading}>Login</Text>
+        <Text style={styles.smallTxt}>Sign in to continue. </Text>
 
         <View style={styles.LowerinnerContainer}>
           <Text style={styles.label}>EMAIL</Text>
@@ -53,6 +78,7 @@ const Login = ({navigation}) => {
           <Text style={styles.label}>PASSWORD</Text>
           <TextInput
             style={styles.textInput}
+            secureTextEntry={true}
             placeholder="Enter Password"
             placeholderTextColor={'#89C2D6'}
             onChangeText={text => {
@@ -63,12 +89,17 @@ const Login = ({navigation}) => {
 
           <TouchableOpacity
             style={styles.signupBtn}
-            onPress={() => {
-              const data = {email, password};
-              console.log(data);
-              navigation.navigate('Home');
-            }}>
-            <Text style={styles.btnTxt}>Sign In</Text>
+            disabled={loader}
+            onPress={handleSubmit}>
+            {loader ? (
+              <ActivityIndicator
+                style={styles.btnTxt}
+                size={27}
+                color={colors.white}
+              />
+            ) : (
+              <Text style={styles.btnTxt}>Sign In</Text>
+            )}
           </TouchableOpacity>
         </View>
 
