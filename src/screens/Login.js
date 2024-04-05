@@ -12,6 +12,7 @@ import {
 import React, {useState} from 'react';
 import colors from '../constants/globalstyles';
 import {loginAuth} from '../utils/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -28,11 +29,13 @@ const Login = ({navigation}) => {
       const data = {email, password};
       console.log(data);
       setLoader(false);
-      if (user)
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'Home'}],
-      });
+      if (user) {
+        await AsyncStorage.setItem('userId', user.user.uid)
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'Home'}],
+        });
+      }
     } catch (error) {
       setLoader(false);
     }

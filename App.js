@@ -12,6 +12,7 @@ import NewExam from './src/screens/NewExam';
 import Head from './src/screens/Head';
 import Login from './src/screens/Login';
 import Signup from './src/screens/Signup';
+import Temp from './src/screens/Temp';
 
 const Stack = createNativeStackNavigator();
 
@@ -77,6 +78,11 @@ function App() {
           options={{title: 'New Exam'}}
           name="NewExam"
           component={NewExam}
+        />
+        <Stack.Screen
+          options={{title: 'Temporary'}}
+          name="Temp"
+          component={Temp}
         />
       </Stack.Navigator>
     </NavigationContainer>

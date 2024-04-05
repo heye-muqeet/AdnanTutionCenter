@@ -10,6 +10,21 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import colors from '../constants/globalstyles';
+import {exportToFirebase} from '../utils/firestoreServices';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import DropDownModel from '../components/DropDownModel';
+
+const availableClasses = [
+  {id: '1', name: '9th'},
+  {id: '2', name: '10th'},
+  {id: '3', name: '11th'},
+  {id: '4', name: '12th'},
+];
+
+const availableBoards = [
+  {id: '1', name: 'Grade 1'},
+  {id: '2', name: 'Grade 2'},
+];
 
 const AddStudent = ({route}) => {
   const [stdName, setName] = useState('');
@@ -17,10 +32,47 @@ const AddStudent = ({route}) => {
   const [stdBoard, setBoard] = useState('');
   const [stdPhone, setPhone] = useState('');
   const [stdEmail, setEmail] = useState('');
+  const [classDropdownVisible, setClassDropdownVisible] = useState(false);
+  const [boardDropdownVisible, setBoardDropdownVisible] = useState(false);
   const [loader, setLoader] = useState(false);
   const {menuItem} = route.params;
 
-  console.log(menuItem);
+  // console.log(menuItem);
+
+  const handleSubmit = async () => {
+    if (!stdName) return Alert.alert('REQUIRED', 'Please fill Student Name');
+    if (!stdClass) return Alert.alert('REQUIRED', 'Please fill Student Class');
+    if (!stdBoard) return Alert.alert('REQUIRED', 'Please fill Student Board');
+
+    try {
+      const studentData = {
+        userId: await AsyncStorage.getItem('userId'),
+        name: stdName,
+        class: stdClass,
+        board: stdBoard,
+        phone: stdPhone,
+        email: stdEmail,
+      };
+
+      setLoader(true);
+      await exportToFirebase('students', studentData);
+      // console.log(data);
+      setName('');
+      setClass('');
+      setBoard('');
+      setPhone('');
+      setEmail('');
+      setLoader(false);
+      ToastAndroid.showWithGravity(
+        'Student Successfully Added!',
+        ToastAndroid.SHORT,
+        ToastAndroid.TOP,
+      );
+    } catch (error) {
+      setLoader(false);
+      Alert.alert('Error', error.message);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -33,24 +85,49 @@ const AddStudent = ({route}) => {
         placeholderTextColor={'grey'}
         onChangeText={text => setName(text)}
         value={stdName}
-      />  
+      />
 
       <Text style={styles.label}>Class</Text>
-      <TextInput
-        style={styles.textInput}
-        placeholder="Class"
-        placeholderTextColor={'grey'}
-        onChangeText={text => setClass(text)}
-        value={stdClass}
+      <TouchableOpacity
+        onPress={() => {
+          setClassDropdownVisible(true);
+        }}>
+        <TextInput
+          style={styles.textInput}
+          placeholder="Select Class"
+          editable={false}
+          placeholderTextColor={'grey'}
+          value={stdClass}
+        />
+      </TouchableOpacity>
+
+      <DropDownModel
+        data={availableClasses}
+        setValue={setClass}
+        visible={classDropdownVisible}
+        setVisible={setClassDropdownVisible}
+        id={"id"}
+        name={"name"}
       />
 
       <Text style={styles.label}>Board</Text>
-      <TextInput
-        style={styles.textInput}
-        placeholder="Enter Board"
-        placeholderTextColor={'grey'}
-        onChangeText={text => setBoard(text)}
-        value={stdBoard}
+      <TouchableOpacity onPress={()=>{setBoardDropdownVisible(true)}}>
+        <TextInput
+          style={styles.textInput}
+          placeholder="Select Board"
+          placeholderTextColor={'grey'}
+          editable={false}
+          value={stdBoard}
+        />
+      </TouchableOpacity>
+
+      <DropDownModel
+        data={availableBoards}
+        setValue={setBoard}
+        visible={boardDropdownVisible}
+        setVisible={setBoardDropdownVisible}
+        id={"id"}
+        name={"name"}
       />
 
       <Text style={styles.label}>Phone Number</Text>
@@ -74,34 +151,7 @@ const AddStudent = ({route}) => {
       <TouchableOpacity
         style={styles.btn}
         disabled={loader}
-        onPress={() => {
-          if (stdName != '' && stdClass != '' && stdBoard != '') {
-            setLoader(true);
-            setTimeout(() => {
-              setLoader(false);
-              const data = {
-                stdName,
-                stdClass,
-                stdBoard,
-                stdPhone,
-                stdEmail,
-              };
-              console.log(data);
-              setName('');
-              setClass('');
-              setBoard('');
-              setPhone('');
-              setEmail('');
-              ToastAndroid.showWithGravity(
-                'Student Successfully Added!',
-                ToastAndroid.SHORT,
-                ToastAndroid.TOP,
-              );
-            }, 2000);
-          } else {
-            Alert.alert('Error', 'Name, Class or Board should not be empty!');
-          }
-        }}>
+        onPress={handleSubmit}>
         {loader ? (
           <ActivityIndicator />
         ) : (

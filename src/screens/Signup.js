@@ -12,6 +12,7 @@ import {
 import React, {useState} from 'react';
 import colors from '../constants/globalstyles';
 import {signupAuth} from '../utils/auth';
+import { exportToFirebase } from '../utils/firestoreServices';
 
 const Signup = ({navigation}) => {
   const [name, setName] = useState('');
@@ -23,7 +24,7 @@ const Signup = ({navigation}) => {
     if (!name) return Alert.alert('REQUIRED', 'Please fill Name');
     if (!email) return Alert.alert('REQUIRED', 'Please fill Email');
     if (!password) return Alert.alert('REQUIRED', 'Please fill Password');
-    if (password.length <= 6)
+    if (password.length < 6)
       return Alert.alert(
         'WEEK PASSWORD',
         'Password should be atleast 6 characters',
@@ -31,11 +32,10 @@ const Signup = ({navigation}) => {
     setLoader(true);
     try {
       const user = await signupAuth(name, email, password);
-      console.log(user);
-      const data = {name, email, password};
-      console.log(data);
+      const data = {id:user.user.uid ,name, email};
+      if (user) {const res = await exportToFirebase('users', data)}
       setLoader(false);
-      if (user) navigation.replace('Login');
+      navigation.replace('Login');
     } catch (error) {
       setLoader(false);
     }

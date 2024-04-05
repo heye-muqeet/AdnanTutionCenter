@@ -1,13 +1,9 @@
 import {Alert} from 'react-native';
 import auth from '@react-native-firebase/auth';
-import {useSyncExternalStore} from 'react';
-import { Text } from 'react-native-svg';
 
 export const signupAuth = async (name, email, password) => {
   try {
     const user = await auth().createUserWithEmailAndPassword(email, password);
-
-    console.log('Registration Successful. Please Login to proceed');
 
     if (user) {
       await auth().currentUser.updateProfile({displayName: name});
@@ -62,12 +58,10 @@ export const loginAuth = async (email, password) => {
             style: 'cancel',
           },
         ],
-        { cancelable: false }      
+        { cancelable: true }      
         );
         return false;
     }
-
-
 
     return user;
   } catch (error) {
