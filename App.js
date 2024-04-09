@@ -13,6 +13,7 @@ import Head from './src/screens/Head';
 import Login from './src/screens/Login';
 import Signup from './src/screens/Signup';
 import Temp from './src/screens/Temp';
+import Students from './src/screens/Students';
 
 const Stack = createNativeStackNavigator();
 
@@ -78,6 +79,11 @@ function App() {
           options={{title: 'New Exam'}}
           name="NewExam"
           component={NewExam}
+        />
+        <Stack.Screen
+          options={{title: 'Students'}}
+          name="Students"
+          component={Students}
         />
         <Stack.Screen
           options={{title: 'Temporary'}}

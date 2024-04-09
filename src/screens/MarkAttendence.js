@@ -1,5 +1,7 @@
+import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   ScrollView,
   StyleSheet,
   Text,
@@ -7,57 +9,56 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
 import colors from '../constants/globalstyles';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import firestore from '@react-native-firebase/firestore';
 
-const studentsData = [
-  {id: 1, name: 'Abdul Muqeet'},
-  {id: 2, name: 'M Jahanzaib'},
-  {id: 3, name: 'Moon'},
-  {id: 4, name: 'Mughal'},
-  {id: 5, name: 'Zeeshan'},
-  {id: 6, name: 'Faiq'},
-  {id: 7, name: 'Sumaira'},
-  {id: 8, name: 'Arshia'},
-  {id: 9, name: 'Summi'},
-  {id: 10, name: 'Salma'},
-  {id: 11, name: 'Rashid'},
-  {id: 12, name: 'Rsahida'},
-  {id: 13, name: 'Noor Jahan'},
-  {id: 14, name: 'Muhammad Ali'},
-  {id: 15, name: 'Muhammad Hamza Khanzada'},
-
-  // Add more students as needed
-];
-
-const MarkAttendence = ({route}) => {
+const MarkAttendence = ({ route }) => {
   const [attendanceData, setAttendanceData] = useState([]);
   const [loader, setLoader] = useState(false);
-  const {board, classes} = route.params;
+  const { board, classes } = route.params;
+  const [studentsData, setStudentsData] = useState([]);
+
+  const getData = async () => {
+    try {
+      const currentUser = await AsyncStorage.getItem('userId');
+      const querySnapshot = await firestore()
+        .collection('students')
+        .where('board', '==', board)
+        .where('class', '==', classes)
+        .where('userId', '==', currentUser)
+        .get();
+
+      let tempStudentsData = [];
+
+      querySnapshot.forEach(documentSnapshot => {
+        const { id, name } = documentSnapshot.data();
+        const student = { id, name };
+        tempStudentsData.push(student);
+      });
+
+      setStudentsData(tempStudentsData);
+
+      const initialAttendance = tempStudentsData.map(student => ({
+        id: student.id,
+        status: 'Present',
+      }));
+      setAttendanceData(initialAttendance);
+
+    } catch (error) {
+      Alert.alert('Error', error.message);
+    }
+  };
 
   useEffect(() => {
-    console.log(board)
-    console.log(classes)
-    const initialAttendance = studentsData.map(student => ({
-      id: student.id,
-      status: 'Present',
-    }));
-    setAttendanceData(initialAttendance);
+    getData();
   }, []);
 
   const markAttendance = (studentId, status) => {
-    const updatedAttendance = attendanceData.filter(
-      item => item.id !== studentId,
+    const updatedAttendance = attendanceData.map(item =>
+      item.id === studentId ? { ...item, status } : item,
     );
-    updatedAttendance.push({id: studentId, status: status});
     setAttendanceData(updatedAttendance);
-  };
-
-  const onPressPresent = studentId => {
-    markAttendance(studentId, 'Present');
-  };
-  const onPressAbsent = studentId => {
-    markAttendance(studentId, 'Absent');
   };
 
   const handleSubmit = () => {
@@ -98,7 +99,7 @@ const MarkAttendence = ({route}) => {
                   },
                 ]}
                 onPress={() => {
-                  onPressPresent(student.id);
+                  markAttendance(student.id, 'Present');
                 }}>
                 <Text
                   style={[
@@ -128,7 +129,7 @@ const MarkAttendence = ({route}) => {
                   },
                 ]}
                 onPress={() => {
-                  onPressAbsent(student.id);
+                  markAttendance(student.id, 'Absent');
                 }}>
                 <Text
                   style={[
@@ -205,8 +206,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: 'bold',
     marginLeft: 5,
-    // paddingTop: 5,
-    // backgroundColor: colors.primary,
   },
 
   attendenceStatusContainer: {
@@ -249,3 +248,4 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
 });
+

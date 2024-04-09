@@ -10,7 +10,7 @@ const availableClasses = [
   {id: 4, name: '12th', src: require('../assets/images/12th.png')},
 ];
 
-console.log(availableClasses[0].src);
+// console.log(availableClasses[0].src);
 
 const availableBoards = [
   {id: 1, name: 'Federal Board', code: 'FB'},
@@ -20,7 +20,7 @@ const availableBoards = [
 const ClassSelection = ({route, navigation}) => {
   const {menuItem} = route.params;
 
-  console.log(menuItem);
+  // console.log(menuItem);
   return (
     <ScrollView style={{flex: 1}}>
       {availableBoards.map(board => (
@@ -33,17 +33,24 @@ const ClassSelection = ({route, navigation}) => {
               style={styles.card}
               imgSrc={classes.src}
               text={'Class ' + classes.name + ' (' + board.code + ')'}
-              navigate={() =>
-                menuItem === '2'
-                  ? navigation.navigate('MarkAttendence', {
-                      board: board.id,
-                      classes: classes.id,
-                    })
-                  : navigation.navigate('NewExam', {
-                      board: board.id,
-                      classes: classes.id,
-                    })
-              }
+              navigate={() => {
+                if (menuItem === '2') {
+                  navigation.navigate('MarkAttendence', {
+                    board: board.name,
+                    classes: classes.name,
+                  });
+                } else if (menuItem === '3') {
+                  navigation.navigate('NewExam', {
+                    board: board.id,
+                    classes: classes.id,
+                  });
+                } else if (menuItem === '4') {
+                  navigation.navigate('Students', {
+                    board: board.name,
+                    classes: classes.name,
+                  });
+                }
+              }}
             />
           ))}
         </View>

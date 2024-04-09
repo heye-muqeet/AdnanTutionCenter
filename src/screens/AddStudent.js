@@ -22,8 +22,8 @@ const availableClasses = [
 ];
 
 const availableBoards = [
-  {id: '1', name: 'Grade 1'},
-  {id: '2', name: 'Grade 2'},
+  {id: '1', name: 'Federal Board'},
+  {id: '2', name: 'Sindh Board'},
 ];
 
 const AddStudent = ({route}) => {
@@ -38,6 +38,15 @@ const AddStudent = ({route}) => {
   const {menuItem} = route.params;
 
   // console.log(menuItem);
+
+
+  const manageClasses = () => {
+    setClassDropdownVisible(true);
+  }
+
+  const manageBoards = () => {
+    setBoardDropdownVisible(true);
+  }
 
   const handleSubmit = async () => {
     if (!stdName) return Alert.alert('REQUIRED', 'Please fill Student Name');
@@ -89,9 +98,7 @@ const AddStudent = ({route}) => {
 
       <Text style={styles.label}>Class</Text>
       <TouchableOpacity
-        onPress={() => {
-          setClassDropdownVisible(true);
-        }}>
+        onPress={manageClasses}>
         <TextInput
           style={styles.textInput}
           placeholder="Select Class"
@@ -111,7 +118,7 @@ const AddStudent = ({route}) => {
       />
 
       <Text style={styles.label}>Board</Text>
-      <TouchableOpacity onPress={()=>{setBoardDropdownVisible(true)}}>
+      <TouchableOpacity onPress={manageBoards}>
         <TextInput
           style={styles.textInput}
           placeholder="Select Board"

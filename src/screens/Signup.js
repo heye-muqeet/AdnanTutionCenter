@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import colors from '../constants/globalstyles';
-import {signupAuth} from '../utils/auth';
+import {addingClasses, signupAuth} from '../utils/auth';
 import { exportToFirebase } from '../utils/firestoreServices';
 
 const Signup = ({navigation}) => {
@@ -32,8 +32,10 @@ const Signup = ({navigation}) => {
     setLoader(true);
     try {
       const user = await signupAuth(name, email, password);
-      const data = {id:user.user.uid ,name, email};
-      if (user) {const res = await exportToFirebase('users', data)}
+      const data = {name, email};
+      if (user) {const res = await exportToFirebase('users', data);
+      addingClasses(res);
+    }
       setLoader(false);
       navigation.replace('Login');
     } catch (error) {

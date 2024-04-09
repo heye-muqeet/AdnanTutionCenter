@@ -1,5 +1,6 @@
 import {Alert} from 'react-native';
 import auth from '@react-native-firebase/auth';
+import { exportToFirebase } from './firestoreServices';
 
 export const signupAuth = async (name, email, password) => {
   try {
@@ -73,5 +74,35 @@ export const loginAuth = async (email, password) => {
     }else{
       Alert.alert('Error', error.message);
     }
+  }
+};
+
+
+
+
+
+export const addingClasses = async (uId) => {
+  try {
+    const availableClasses = [
+    {userId: uId, class: '9th', board: 'Federal Board'},
+    {userId: uId, class: '10th', board: 'Federal Board'},
+    {userId: uId, class: '11th', board: 'Federal Board'},
+    {userId: uId, class: '12th', board: 'Federal Board'},
+    {userId: uId, class: '9th', board: 'Sindh Board'},
+    {userId: uId, class: '10th', board: 'Sindh Board'},
+    {userId: uId, class: '11th', board: 'Sindh Board'},
+    {userId: uId, class: '12th', board: 'Sindh Board'},
+  ];
+    await exportToFirebase('classes', availableClasses[0]);
+    await exportToFirebase('classes', availableClasses[1]);
+    await exportToFirebase('classes', availableClasses[2]);
+    await exportToFirebase('classes', availableClasses[3]);
+    await exportToFirebase('classes', availableClasses[4]);
+    await exportToFirebase('classes', availableClasses[5]);
+    await exportToFirebase('classes', availableClasses[6]);
+    await exportToFirebase('classes', availableClasses[7]);
+  } catch (error) {
+
+    Alert.alert('Error', error.message);
   }
 };
