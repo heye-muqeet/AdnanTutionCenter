@@ -1,36 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'; 
 import { ScrollView, StyleSheet, Text, View, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
 import colors from '../constants/globalstyles';
+import { getClass, getStudents } from '../utils/firestoreServices';
 
 const Students = ({ route }) => {
-  const { board, classes } = route.params;
+  const { board, grade } = route.params;
   const [studentsData, setStudentsData] = useState([]);
 
-  const getData = async () => {
-    try {
-      const currentUser = await AsyncStorage.getItem('userId');
-      const querySnapshot = await firestore()
-        .collection('students')
-        .where('board', '==', board)
-        .where('class', '==', classes)
-        .where('userId', '==', currentUser)
-        .get();
-
-      let tempStudentsData = [];
-
-      querySnapshot.forEach(documentSnapshot => {
-        const { id, name } = documentSnapshot.data();
-        const student = { id, name };
-        tempStudentsData.push(student);
-      });
-
-      setStudentsData(tempStudentsData);
-    } catch (error) {
-      Alert.alert('Error', error.message);
-    }
-  };
+  const getData = async() => {
+    const gradeId = await getClass(board, grade); 
+    setStudentsData(getStudents(gradeId))
+  }
 
   useEffect(() => {
     getData();

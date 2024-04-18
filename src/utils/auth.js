@@ -14,7 +14,6 @@ export const signupAuth = async (name, email, password) => {
         'Please verify your email address. An email has been sent to ' + email,
       );
 
-      console.log(user);
       return user;
     }
   } catch (error) {
@@ -22,7 +21,6 @@ export const signupAuth = async (name, email, password) => {
       Alert.alert('ERROR', 'That email address is already in use!');
     } else if (error.code === 'auth/invalid-email') {
       Alert.alert('ERROR', 'That email address is invalid!');
-      console.log(error);
     }else{
       Alert.alert('Error', error.message);
     }
@@ -36,7 +34,6 @@ export const loginAuth = async (email, password) => {
       password,
     );
     const varifivationStatus = await auth().currentUser.emailVerified;
-    console.log(varifivationStatus)
     if (!varifivationStatus) {
       Alert.alert(
         'Email Verification',
@@ -66,7 +63,6 @@ export const loginAuth = async (email, password) => {
 
     return user;
   } catch (error) {
-    console.log(error);
     if (error.code === 'auth/invalid-email') {
       Alert.alert('ERROR', 'That email address is invalid!');
     } else if (error.code === 'auth/invalid-credential') {
@@ -76,9 +72,6 @@ export const loginAuth = async (email, password) => {
     }
   }
 };
-
-
-
 
 
 export const addingClasses = async (uId) => {

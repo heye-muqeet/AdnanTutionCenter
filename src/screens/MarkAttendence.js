@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -12,66 +12,76 @@ import {
 import colors from '../constants/globalstyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
+import {exportToFirebase, getClass, getStudents} from '../utils/firestoreServices';
+import ClassSelection from './ClassSelection';
 
-const MarkAttendence = ({ route }) => {
+const MarkAttendence = ({route}) => {
   const [attendanceData, setAttendanceData] = useState([]);
   const [loader, setLoader] = useState(false);
-  const { board, classes } = route.params;
+  const {board, grade} = route.params;
   const [studentsData, setStudentsData] = useState([]);
-
+  
+  useEffect(() => {
+    getData();
+  }, []);
+  
   const getData = async () => {
     try {
       const currentUser = await AsyncStorage.getItem('userId');
-      const querySnapshot = await firestore()
-        .collection('students')
-        .where('board', '==', board)
-        .where('class', '==', classes)
-        .where('userId', '==', currentUser)
-        .get();
-
-      let tempStudentsData = [];
-
-      querySnapshot.forEach(documentSnapshot => {
-        const { id, name } = documentSnapshot.data();
-        const student = { id, name };
-        tempStudentsData.push(student);
-      });
-
+      const gradeId = await getClass(board, grade);
+      const tempStudentsData = await getStudents(gradeId);
       setStudentsData(tempStudentsData);
 
       const initialAttendance = tempStudentsData.map(student => ({
-        id: student.id,
+        studentId: student.id,
         status: 'Present',
       }));
       setAttendanceData(initialAttendance);
-
     } catch (error) {
       Alert.alert('Error', error.message);
     }
   };
 
-  useEffect(() => {
-    getData();
-  }, []);
-
   const markAttendance = (studentId, status) => {
     const updatedAttendance = attendanceData.map(item =>
-      item.id === studentId ? { ...item, status } : item,
+      item.studentId === studentId ? {...item, status} : item,
     );
     setAttendanceData(updatedAttendance);
   };
 
-  const handleSubmit = () => {
-    setLoader(true);
-    setTimeout(() => {
-      setLoader(false);
-      console.log(attendanceData);
+  const handleSubmit = async() => {
+    try {
+      setLoader(true);
+      const gradeId = await getClass(board, grade); 
+      const date = new Date().toDateString()
+      const userId = await AsyncStorage.getItem('userId');
+
+      const attendanceLogData = {
+        userId: userId,
+        date: date,
+        cid: gradeId,
+      };
+      
+      
+      const attendanceId = await exportToFirebase('attendenceLog', attendanceLogData)
+      
+      attendanceData.forEach(async(doc) => {
+        await exportToFirebase('attendence', {...doc, attendanceId, userId})
+      })
 
       ToastAndroid.showWithGravity(
         'Submitted Successfully!',
         ToastAndroid.SHORT,
         ToastAndroid.TOP,
       );
+      setLoader(false);
+    } catch (error) {
+      setLoader(false);
+      Alert.alert('Error', error.message);
+    }
+
+    setTimeout(() => {
+
     }, 2000);
   };
 
@@ -80,7 +90,7 @@ const MarkAttendence = ({ route }) => {
       <Text style={styles.mainHeading}>Attendance Sheet</Text>
 
       {studentsData.map(student => (
-        <View key={student.id} style={styles.subContainer}>
+        <View key={student.studentId} style={styles.subContainer}>
           <View style={styles.mainView}>
             <View style={styles.studentNameContainer}>
               <Text style={styles.stdName}>{student.name}</Text>
@@ -92,7 +102,7 @@ const MarkAttendence = ({ route }) => {
                   {
                     backgroundColor: attendanceData.find(
                       item =>
-                        item.id === student.id && item.status === 'Present',
+                        item.studentId === student.id && item.status === 'Present',
                     )
                       ? colors.primary
                       : colors.white,
@@ -107,7 +117,7 @@ const MarkAttendence = ({ route }) => {
                     {
                       color: attendanceData.find(
                         item =>
-                          item.id === student.id && item.status === 'Present',
+                          item.studentId === student.id && item.status === 'Present',
                       )
                         ? colors.white
                         : colors.black,
@@ -122,7 +132,7 @@ const MarkAttendence = ({ route }) => {
                   {
                     backgroundColor: attendanceData.find(
                       item =>
-                        item.id === student.id && item.status === 'Absent',
+                        item.studentId === student.id && item.status === 'Absent',
                     )
                       ? colors.primary
                       : colors.white,
@@ -137,7 +147,7 @@ const MarkAttendence = ({ route }) => {
                     {
                       color: attendanceData.find(
                         item =>
-                          item.id === student.id && item.status === 'Absent',
+                          item.studentId === student.id && item.status === 'Absent',
                       )
                         ? colors.white
                         : colors.black,
@@ -248,4 +258,3 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
 });
-

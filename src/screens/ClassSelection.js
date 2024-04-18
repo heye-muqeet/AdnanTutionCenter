@@ -37,17 +37,17 @@ const ClassSelection = ({route, navigation}) => {
                 if (menuItem === '2') {
                   navigation.navigate('MarkAttendence', {
                     board: board.name,
-                    classes: classes.name,
+                    grade: classes.name,
                   });
                 } else if (menuItem === '3') {
                   navigation.navigate('NewExam', {
-                    board: board.id,
-                    classes: classes.id,
+                    board: board.name,
+                    grade: classes.name,
                   });
                 } else if (menuItem === '4') {
                   navigation.navigate('Students', {
                     board: board.name,
-                    classes: classes.name,
+                    grade: classes.name,
                   });
                 }
               }}

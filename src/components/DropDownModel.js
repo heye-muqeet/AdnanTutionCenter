@@ -12,7 +12,7 @@ const DropDownModel = ({data, setValue, visible, setVisible, id, name}) => {
         setVisible(false);
       }}
     >
-      <Text>{item[name]}</Text>
+      <Text style={styles.item}>{item[name]}</Text>
     </TouchableOpacity>
   );
   return (
@@ -66,4 +66,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ccc',
     width: '100%',
   },
+  item:{
+    color: colors.black,
+  }
 })

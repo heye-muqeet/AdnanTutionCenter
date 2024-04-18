@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import colors from '../constants/globalstyles';
-import {exportToFirebase} from '../utils/firestoreServices';
+import {exportToFirebase, getClass} from '../utils/firestoreServices';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDownModel from '../components/DropDownModel';
 
@@ -37,9 +37,6 @@ const AddStudent = ({route}) => {
   const [loader, setLoader] = useState(false);
   const {menuItem} = route.params;
 
-  // console.log(menuItem);
-
-
   const manageClasses = () => {
     setClassDropdownVisible(true);
   }
@@ -53,19 +50,18 @@ const AddStudent = ({route}) => {
     if (!stdClass) return Alert.alert('REQUIRED', 'Please fill Student Class');
     if (!stdBoard) return Alert.alert('REQUIRED', 'Please fill Student Board');
 
+    const gradeId = await getClass(stdBoard, stdClass);
     try {
-      const studentData = {
+      setLoader(true);
+      const  studentData = {
         userId: await AsyncStorage.getItem('userId'),
         name: stdName,
-        class: stdClass,
-        board: stdBoard,
+        cid: gradeId,
         phone: stdPhone,
         email: stdEmail,
       };
 
-      setLoader(true);
       await exportToFirebase('students', studentData);
-      // console.log(data);
       setName('');
       setClass('');
       setBoard('');

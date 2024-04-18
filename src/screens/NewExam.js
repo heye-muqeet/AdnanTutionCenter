@@ -26,10 +26,10 @@ const NewExam = ({route, navigation}) => {
   // const [date, setDate] = useState(Dayjs);
   // console.log(date)
 
-  const {board, classes} = route.params;
+  const {board, grade} = route.params;
 
   console.log('Board: ', board);
-  console.log('Class: ', classes);
+  console.log('Class: ', grade);
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
