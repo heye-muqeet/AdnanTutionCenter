@@ -5,26 +5,30 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
 import colors from '../constants/globalstyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import firestore from '@react-native-firebase/firestore';
-import {exportToFirebase, getClass, getStudents} from '../utils/firestoreServices';
-import ClassSelection from './ClassSelection';
+import {
+  exportToFirebase,
+  getClass,
+  getStudents,
+} from '../utils/firestoreServices';
 
 const MarkAttendence = ({route}) => {
   const [attendanceData, setAttendanceData] = useState([]);
   const [loader, setLoader] = useState(false);
   const {board, grade} = route.params;
   const [studentsData, setStudentsData] = useState([]);
-  
+  const [topic, setTopic] = useState();
+
   useEffect(() => {
     getData();
   }, []);
-  
+
   const getData = async () => {
     try {
       const currentUser = await AsyncStorage.getItem('userId');
@@ -49,25 +53,30 @@ const MarkAttendence = ({route}) => {
     setAttendanceData(updatedAttendance);
   };
 
-  const handleSubmit = async() => {
+  const handleSubmit = async () => {
+    if (!topic) return Alert.alert('REQUIRED', 'Please fill Topic Name');
+
     try {
       setLoader(true);
-      const gradeId = await getClass(board, grade); 
-      const date = new Date().toDateString()
+      const gradeId = await getClass(board, grade);
+      const date = new Date().toDateString();
       const userId = await AsyncStorage.getItem('userId');
 
       const attendanceLogData = {
         userId: userId,
         date: date,
         cid: gradeId,
+        topic: topic,
       };
-      
-      
-      const attendanceId = await exportToFirebase('attendenceLog', attendanceLogData)
-      
-      attendanceData.forEach(async(doc) => {
-        await exportToFirebase('attendence', {...doc, attendanceId, userId})
-      })
+
+      const attendanceId = await exportToFirebase(
+        'attendenceLog',
+        attendanceLogData,
+      );
+
+      attendanceData.forEach(async doc => {
+        await exportToFirebase('attendence', {...doc, attendanceId, userId});
+      });
 
       ToastAndroid.showWithGravity(
         'Submitted Successfully!',
@@ -80,18 +89,26 @@ const MarkAttendence = ({route}) => {
       Alert.alert('Error', error.message);
     }
 
-    setTimeout(() => {
-
-    }, 2000);
+    setTimeout(() => {}, 2000);
   };
 
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.mainHeading}>Attendance Sheet</Text>
-
-      {studentsData.map(student => (
-        <View key={student.studentId} style={styles.subContainer}>
-          <View style={styles.mainView}>
+      <View style={styles.topicContainer}>
+        <Text style={styles.label}>Topic:</Text>
+        <TextInput
+          style={styles.textInput}
+          placeholder="Enter Topic Name"
+          placeholderTextColor={'grey'}
+          onChangeText={text => setTopic(text)}
+          multiline
+          value={topic}
+        />
+      </View>
+      {studentsData &&
+        studentsData.map(student => (
+          <View key={student.studentId} style={styles.subContainer}>
             <View style={styles.studentNameContainer}>
               <Text style={styles.stdName}>{student.name}</Text>
             </View>
@@ -102,7 +119,8 @@ const MarkAttendence = ({route}) => {
                   {
                     backgroundColor: attendanceData.find(
                       item =>
-                        item.studentId === student.id && item.status === 'Present',
+                        item.studentId === student.id &&
+                        item.status === 'Present',
                     )
                       ? colors.primary
                       : colors.white,
@@ -117,7 +135,8 @@ const MarkAttendence = ({route}) => {
                     {
                       color: attendanceData.find(
                         item =>
-                          item.studentId === student.id && item.status === 'Present',
+                          item.studentId === student.id &&
+                          item.status === 'Present',
                       )
                         ? colors.white
                         : colors.black,
@@ -132,7 +151,8 @@ const MarkAttendence = ({route}) => {
                   {
                     backgroundColor: attendanceData.find(
                       item =>
-                        item.studentId === student.id && item.status === 'Absent',
+                        item.studentId === student.id &&
+                        item.status === 'Absent',
                     )
                       ? colors.primary
                       : colors.white,
@@ -147,7 +167,8 @@ const MarkAttendence = ({route}) => {
                     {
                       color: attendanceData.find(
                         item =>
-                          item.studentId === student.id && item.status === 'Absent',
+                          item.studentId === student.id &&
+                          item.status === 'Absent',
                       )
                         ? colors.white
                         : colors.black,
@@ -158,8 +179,7 @@ const MarkAttendence = ({route}) => {
               </TouchableOpacity>
             </View>
           </View>
-        </View>
-      ))}
+        ))}
 
       <TouchableOpacity
         style={styles.btn}
@@ -184,26 +204,58 @@ const styles = StyleSheet.create({
     backgroundColor: colors.secondary,
   },
 
+  topicContainer:{
+    backgroundColor: colors.white,
+    paddingHorizontal: 10,
+    borderWidth: 0.3,
+    borderRadius: 15,
+    // marginVertical: 3,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 10,
+    // flexWrap: 'wrap',
+  },
+
+  label: {
+    paddingLeft: 10,
+    color: colors.black,
+    fontSize: 17,
+    fontWeight: 'bold',
+    marginLeft: 5,
+    width: '20%',
+    // paddingRight: 20,
+  },
+
+  textInput: {
+    marginHorizontal: 10,
+    // marginRight: 10,
+    color: colors.black,
+    backgroundColor: colors.white,
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    borderWidth: 2,
+    borderColor: colors.secondary,
+    width: '80%'
+  },
+  
+    mainHeading: {
+      color: colors.black,
+      textAlign: 'center',
+      fontSize: 22,
+      fontWeight: 'bold',
+      marginBottom: 15,
+    },
+
   subContainer: {
     backgroundColor: colors.white,
     paddingHorizontal: 10,
-    borderWidth: 0.1,
-    borderRadius: 30,
+    borderWidth: 0.3,
+    borderRadius: 15,
     marginVertical: 3,
-  },
-
-  mainView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: 10,
-  },
-
-  mainHeading: {
-    color: colors.black,
-    textAlign: 'center',
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 15,
+    paddingVertical: 10,
   },
 
   studentNameContainer: {

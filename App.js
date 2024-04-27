@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from './src/screens/Home';
@@ -14,6 +14,8 @@ import Login from './src/screens/Login';
 import Signup from './src/screens/Signup';
 import Temp from './src/screens/Temp';
 import Students from './src/screens/Students';
+import AttendenceLog from './src/screens/AttendenceLog';
+import ViewAttendence from './src/screens/ViewAttendence';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,7 +23,7 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Head"
+        initialRouteName="Home"
         screenOptions={styles.navigationBar}>
         <Stack.Screen
           options={{
@@ -84,6 +86,16 @@ function App() {
           options={{title: 'Students'}}
           name="Students"
           component={Students}
+        />
+        <Stack.Screen
+          options={{title: 'Attendence Log'}}
+          name="AttendenceLog"
+          component={AttendenceLog}
+        />
+        <Stack.Screen
+          options={{title: 'Attendence'}}
+          name="ViewAttendence"
+          component={ViewAttendence}
         />
         <Stack.Screen
           options={{title: 'Temporary'}}

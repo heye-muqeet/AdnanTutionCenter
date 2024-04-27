@@ -49,6 +49,11 @@ const ClassSelection = ({route, navigation}) => {
                     board: board.name,
                     grade: classes.name,
                   });
+                }else if (menuItem === '5') {
+                  navigation.navigate('AttendenceLog', {
+                    board: board.name,
+                    grade: classes.name,
+                  });
                 }
               }}
             />

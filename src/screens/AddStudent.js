@@ -175,10 +175,10 @@ const styles = StyleSheet.create({
   },
 
   mainHeading: {
-    color: colors.black,
+    color: colors.primary,
     textAlign: 'center',
     fontSize: 22,
-    fontWeight: 'bold',
+    fontWeight: "700",
     marginBottom: 15,
   },
 

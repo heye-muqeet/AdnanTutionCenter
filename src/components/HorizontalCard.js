@@ -6,7 +6,7 @@ const HorizontalCard = ({imgSrc, text, navigate}) => {
   return (
     <View>
       <TouchableOpacity style={styles.button} onPress={navigate}>
-        <Image source={imgSrc} style={styles.cardImage} />
+        <Image source={imgSrc} alt='ImageNotFound' style={styles.cardImage} />
         <Text style={styles.cardText}>{text}</Text>
       </TouchableOpacity>
     </View>

@@ -24,8 +24,12 @@ const Home = ({navigation}) => {
           navigate={() => navigation.navigate('ClassSelection', {menuItem: '4'})}
         />
         <BoxCard
+          text={'Attendence Log'}
+          navigate={() => navigation.navigate('ClassSelection', {menuItem: '5'})}
+        />
+        <BoxCard
           text={'Temporary\nScreen'}
-          navigate={() => navigation.navigate('Temp', {menuItem: '5'})}
+          navigate={() => navigation.navigate('Temp', {menuItem: '6'})}
         />
       </View>
     </View>

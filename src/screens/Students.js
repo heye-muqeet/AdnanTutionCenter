@@ -11,7 +11,7 @@ const Students = ({ route }) => {
 
   const getData = async() => {
     const gradeId = await getClass(board, grade); 
-    setStudentsData(getStudents(gradeId))
+    setStudentsData(await getStudents(gradeId))
   }
 
   useEffect(() => {

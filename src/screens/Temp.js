@@ -1,48 +1,68 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, Alert } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { exportToFirebase } from '../utils/firestoreServices';
+import React, {useEffect, useState} from 'react';
+import {View, Text, TouchableOpacity, Alert, ScrollView, StyleSheet} from 'react-native';
+import {getAttendenceByLog, getAttendenceLog, getClass, getStudent} from '../utils/firestoreServices';
+import colors from '../constants/globalstyles';
 import firestore from '@react-native-firebase/firestore';
 
-const Temp = () => {
-  const [studentsData, setStudentsData] = useState('');
+const Temp = ({route, navigation}) => {
+  const [data, setData] = useState([]);
 
-  const getData = async () => {
+  const handleSubmit = async () => {
     try {
-      const currentUser = await AsyncStorage.getItem('userId');
-      const querySnapshot = await firestore()
-        .collection('classes')
-        .where('board', '==', 'Federal Board')
-        .where('class', '==', '9th')
-        .where('userId', '==', currentUser)
-        .get();
-
-      let tempStudentsData = '';
-
-      querySnapshot.forEach(documentSnapshot => {
-        const { id } = documentSnapshot.data();
-        tempStudentsData = id;
-      });
-
-      return tempStudentsData;
+      // const studentID = "79beaadb-c2b9-4e91-8ac3-3927bc7c3d77"; 
+      const attendanceId = "d3d1c089-0247-49b6-bca3-7848897e5115";
+      
+      const attendenceData = await getAttendenceByLog(attendanceId)
+      
+      attendenceData.map(async (obj)=>{
+        const {studentId, status} = obj
+        const {name} = await getStudent(obj.studentId)
+        data.push({studentId, status, name})
+      })
+      
     } catch (error) {
       Alert.alert('Error', error.message);
     }
   };
 
-  const handleSubmit = async () => {
-    const data = await getData();
-    setStudentsData(data);
-    console.log(studentsData);
-  };
+  useEffect(() => {
+    handleSubmit();
+  }, []);
 
   return (
     <View>
-      <TouchableOpacity onPress={handleSubmit}>
-        <Text>hit me</Text>
+      <TouchableOpacity style={styles.subContainer} onPress={handleSubmit}>
+        <Text>Hit ME</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
 export default Temp;
+
+const styles = StyleSheet.create({
+  container:{
+    flex: 1,
+    padding: 15,
+    backgroundColor: colors.secondary,
+  },
+
+  subContainer:{
+    backgroundColor: colors.white,
+    paddingHorizontal: 10,
+    borderWidth: 0.1,
+    borderRadius: 30,
+    marginVertical: 3,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+  },  
+
+  topicContainer:{
+
+  },
+
+  dateContainer:{
+
+  },
+})
