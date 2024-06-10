@@ -23,7 +23,7 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Home"
+        initialRouteName="Head"
         screenOptions={styles.navigationBar}>
         <Stack.Screen
           options={{

@@ -1,28 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {
-  ActivityIndicator,
   Alert,
   FlatList,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
-  ToastAndroid,
-  Touchable,
   TouchableOpacity,
   View,
 } from 'react-native';
 import colors from '../constants/globalstyles';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-  exportToFirebase,
-  getAttendenceByLog,
-  getClass,
-  getStudent,
-  getStudents,
-  getStudentsById,
-} from '../utils/firestoreServices';
+import {getAttendenceByLog, getStudent} from '../utils/firestoreServices';
 
 const ViewAttendence = ({route}) => {
   const {logId, topic} = route.params;
@@ -40,20 +28,12 @@ const ViewAttendence = ({route}) => {
       let data = [];
 
       for (const obj of logData) {
-        // console.log(obj)
         const {studentId, status} = obj;
         const {name} = await getStudent(obj.studentId);
         data.push({studentId, status, name});
       }
 
-      // for (item in logData) {
-      //   const {studentId, status} = logData[item];
-      //   const {name} = await getStudent(logData[item].studentId);
-      //   data.push({studentId, status, name});
-      // }
-
       setAttendanceData(data);
-      // console.log(attendanceData)
       setLoader(false);
     } catch (error) {
       setLoader(false);
@@ -75,10 +55,6 @@ const ViewAttendence = ({route}) => {
         />
       </View>
 
-      {/* <TouchableOpacity style={styles.subContainer} onPress={getData}>
-        <Text style={styles.stdName}>Hit ME</Text>
-      </TouchableOpacity> */}
-
       <FlatList
         data={attendanceData}
         onRefresh={getData}
@@ -90,12 +66,44 @@ const ViewAttendence = ({route}) => {
               <Text style={styles.stdName}>{item.name}</Text>
             </View>
             <View style={styles.attendenceStatusContainer}>
-              <TouchableOpacity style={[styles.attendenceBtn]}>
-                <Text style={[styles.attendenceBtnTxt]}>Present</Text>
+              <TouchableOpacity
+                style={[
+                  styles.attendenceBtn,
+                  {
+                    backgroundColor:
+                      item.status === 'Present' ? colors.primary : colors.white,
+                  },
+                ]}>
+                <Text
+                  style={[
+                    styles.attendenceBtnTxt,
+                    {
+                      color:
+                        item.status === 'Present' ? colors.white : colors.black,
+                    },
+                  ]}>
+                  Present
+                </Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={[styles.attendenceBtn]}>
-                <Text>Absent</Text>
+              <TouchableOpacity
+                style={[
+                  styles.attendenceBtn,
+                  {
+                    backgroundColor:
+                      item.status === 'Absent' ? colors.primary : colors.white,
+                  },
+                ]}>
+                <Text
+                  style={[
+                    styles.attendenceBtnTxt,
+                    {
+                      color:
+                        item.status === 'Absent' ? colors.white : colors.black,
+                    },
+                  ]}>
+                  Absent
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -119,12 +127,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderWidth: 0.3,
     borderRadius: 30,
-    // marginVertical: 3,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 10,
-    // flexWrap: 'wrap',
   },
 
   label: {
@@ -134,12 +140,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 5,
     width: '20%',
-    // paddingRight: 20,
   },
 
   textInput: {
     marginHorizontal: 10,
-    // marginRight: 10,
     color: colors.black,
     backgroundColor: colors.white,
     borderRadius: 30,
@@ -152,7 +156,7 @@ const styles = StyleSheet.create({
     color: colors.black,
     textAlign: 'center',
     fontSize: 22,
-    fontWeight: 'bold',
+    fontWeight: '700',
     marginBottom: 15,
   },
 

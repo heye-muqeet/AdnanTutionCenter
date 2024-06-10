@@ -15,6 +15,7 @@ const availableClasses = [
 const availableBoards = [
   {id: 1, name: 'Federal Board', code: 'FB'},
   {id: 2, name: 'Sindh Board', code: 'KB'},
+  {id: 3, name: 'Agha Khan Board', code: 'AKB'},
 ];
 
 const ClassSelection = ({route, navigation}) => {

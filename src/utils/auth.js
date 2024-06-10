@@ -85,6 +85,10 @@ export const addingClasses = async (uId) => {
     {userId: uId, class: '10th', board: 'Sindh Board'},
     {userId: uId, class: '11th', board: 'Sindh Board'},
     {userId: uId, class: '12th', board: 'Sindh Board'},
+    {userId: uId, class: '9th', board: 'Agha Khan Board'},
+    {userId: uId, class: '10th', board: 'Agha Khan Board'},
+    {userId: uId, class: '11th', board: 'Agha Khan Board'},
+    {userId: uId, class: '12th', board: 'Agha Khan Board'},
   ];
     await exportToFirebase('classes', availableClasses[0]);
     await exportToFirebase('classes', availableClasses[1]);
@@ -94,6 +98,10 @@ export const addingClasses = async (uId) => {
     await exportToFirebase('classes', availableClasses[5]);
     await exportToFirebase('classes', availableClasses[6]);
     await exportToFirebase('classes', availableClasses[7]);
+    await exportToFirebase('classes', availableClasses[8]);
+    await exportToFirebase('classes', availableClasses[9]);
+    await exportToFirebase('classes', availableClasses[10]);
+    await exportToFirebase('classes', availableClasses[11]);
   } catch (error) {
 
     Alert.alert('Error', error.message);

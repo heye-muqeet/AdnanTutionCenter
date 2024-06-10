@@ -24,6 +24,7 @@ const availableClasses = [
 const availableBoards = [
   {id: '1', name: 'Federal Board'},
   {id: '2', name: 'Sindh Board'},
+  {id: '3', name: 'Agha Khan Board'},
 ];
 
 const AddStudent = ({route}) => {
