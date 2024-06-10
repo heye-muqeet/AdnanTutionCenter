@@ -26,15 +26,15 @@ const styles = StyleSheet.create({
         // // shadowRadius: 50,
         // marginHorizontal: 4,
         // marginVertical: 6,
-        width: 100,
-        height: 100,
+        // width: 100,
+        height: 80,
         justifyContent: 'center',
         alignItems: 'center',
         marginTop:10 
       },
     
       content: {
-        fontSize: 15,
+        fontSize: 20,
         color: colors.secondary,
         textAlign: 'center',
         // padding: 20,

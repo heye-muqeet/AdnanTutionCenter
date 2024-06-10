@@ -1,4 +1,3 @@
-import * as React from 'react';
 import {StyleSheet} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -18,12 +17,11 @@ import AttendenceLog from './src/screens/AttendenceLog';
 import ViewAttendence from './src/screens/ViewAttendence';
 
 const Stack = createNativeStackNavigator();
-
-function App() {
+function App () {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Head"
+        initialRouteName={'Head'}
         screenOptions={styles.navigationBar}>
         <Stack.Screen
           options={{

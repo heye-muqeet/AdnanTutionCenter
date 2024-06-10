@@ -6,11 +6,26 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import colors from '../constants/globalstyles';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const Head = ({navigation}) => {
+  const initialRoute = async() =>
+    {
+      try {
+        const userId = await AsyncStorage.getItem('userId');
+        console.log("dataaaaa",userId)
+        if(userId) navigation.navigate("Home")
+        else navigation.navigate("Head")
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    useEffect(()=>{
+      initialRoute()
+    },[])
   return (
     <View style={styles.container}>
       <StatusBar hidden={true} />

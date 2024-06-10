@@ -43,6 +43,7 @@ const Login = ({navigation}) => {
 
   return (
     <View style={styles.container}>
+      
       <StatusBar hidden={true} />
       <View style={styles.uperContainer}>
         <View style={styles.backContainer}>
