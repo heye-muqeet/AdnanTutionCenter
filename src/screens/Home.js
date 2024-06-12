@@ -2,7 +2,6 @@ import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import BoxCard from '../components/BoxCard';
 import colors from '../constants/globalstyles';
-import {firebase} from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -46,6 +45,12 @@ const Home = ({navigation}) => {
           text={'Attendence Log'}
           navigate={() =>
             navigation.navigate('ClassSelection', {menuItem: '5'})
+          }
+        />
+        <BoxCard
+          text={'Welcome to ATC AI'}
+          navigate={() =>
+            navigation.navigate('ChatBot', {menuItem: '5'})
           }
         />
         {/* <BoxCard

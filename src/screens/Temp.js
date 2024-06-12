@@ -20,6 +20,7 @@ const Temp = ({route, navigation}) => {
         data.push({studentId, status, name})
       })
       
+      
     } catch (error) {
       Alert.alert('Error', error.message);
     }
