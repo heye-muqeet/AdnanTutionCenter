@@ -15,10 +15,10 @@ import Temp from './src/screens/Temp';
 import Students from './src/screens/Students';
 import AttendenceLog from './src/screens/AttendenceLog';
 import ViewAttendence from './src/screens/ViewAttendence';
-import ChatBot from './src/screens/ChatBot'
+import ChatBot from './src/screens/ChatBot';
 
 const Stack = createNativeStackNavigator();
-function App () {
+function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -97,14 +97,14 @@ function App () {
           component={ViewAttendence}
         />
         <Stack.Screen
-          options={{title: 'Temporary'}}
-          name="Temp"
-          component={Temp}
-        />
-        <Stack.Screen
           options={{title: 'Welcome to ATC AI'}}
           name="ChatBot"
           component={ChatBot}
+        />
+        <Stack.Screen
+          options={{title: 'Temporary'}}
+          name="Temp"
+          component={Temp}
         />
       </Stack.Navigator>
     </NavigationContainer>

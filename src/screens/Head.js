@@ -16,7 +16,7 @@ const Head = ({navigation}) => {
     {
       try {
         const userId = await AsyncStorage.getItem('userId');
-        console.log("dataaaaa",userId)
+        // console.log("dataaaaa",userId)
         if(userId) navigation.navigate("Home")
         else navigation.navigate("Head")
       } catch (error) {
